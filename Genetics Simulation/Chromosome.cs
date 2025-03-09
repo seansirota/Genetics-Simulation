@@ -113,7 +113,7 @@ namespace Genetics_Simulation
                 int mutationThreshold = Simulation.Random.Next(1, 101);
                 if (mutationThreshold <= Simulation.MutationChance)
                 {
-                    gene = new Gene(g.CPos, g.GPos, GUID.GenerateHexColor(Simulation.Random.Next(0, 255), Simulation.Random.Next(0, 255), Simulation.Random.Next(0, 255)));
+                    gene = new Gene(g.CPos, g.GPos, GUID.GenerateHexColor());
                     
                     desirability = gene.Desirability + Simulation.Random.Next(0 - Simulation.MutationVarianceChance, 0 + Simulation.MutationVarianceChance);
                     if (desirability < 0) desirability = 0;

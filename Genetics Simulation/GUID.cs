@@ -10,31 +10,36 @@ namespace Genetics_Simulation
     {
         private static HashSet<string> _usedGUIDs = new HashSet<string>();
         private static List<string> _usedColors = new List<string>();
-        private static readonly int _colorVariation = 0;
 
         public static string GenerateGUID(string prefix, int length)
         {
             string newGUID;
+            int attempts = 0;
 
             do
             {
                 newGUID = $"{prefix}-{Guid.NewGuid().ToString("N").Substring(0, length).ToUpper()}";
+                attempts++;
+                if (attempts > 1000) throw new Exception($"GUID generation failed after 1000 attempts for prefix {prefix}.");
             } while (_usedGUIDs.Contains(newGUID));
 
             _usedGUIDs.Add(newGUID);
             return newGUID;
         }
 
-        public static string GenerateHexColor(int rMid, int gMid, int bMid)
+        public static string GenerateHexColor()
         {
             string hexColor;
+            int attempts = 0;
 
             do
             {
-                int r = Math.Clamp(Simulation.Random.Next(rMid - _colorVariation, rMid + _colorVariation + 1), 0, 255);
-                int g = Math.Clamp(Simulation.Random.Next(gMid - _colorVariation, gMid + _colorVariation + 1), 0, 255);
-                int b = Math.Clamp(Simulation.Random.Next(bMid - _colorVariation, bMid + _colorVariation + 1), 0, 255);
+                int r = Simulation.Random.Next(0, 255);
+                int g = Simulation.Random.Next(0, 255);
+                int b = Simulation.Random.Next(0, 255);
                 hexColor = $"#{r:X2}{g:X2}{b:X2}";
+                attempts++;
+                if (attempts > 1000) throw new Exception($"Color generation failed after 1000 attempts for color {hexColor}.");
             } while (_usedColors.Contains(hexColor));
 
             _usedColors.Add(hexColor);

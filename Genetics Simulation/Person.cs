@@ -9,7 +9,9 @@ namespace Genetics_Simulation
 {
     public class Person
     {
+        public static int PersonCount;
         public string ID { get; set; }
+        public int Number { get; set; }
         public string Gender { get; set; }
         public KeyValuePair<string, int> Region { get; set; }
         public string HexColor { get; set; }
@@ -32,11 +34,12 @@ namespace Genetics_Simulation
             MotherID = string.Empty;
         }
 
-        public Person(int genderRatio, int generation, KeyValuePair<string, int> region, int rMid, int gMid, int bMid)
+        public Person(int genderRatio, int generation, KeyValuePair<string, int> region)
         {
             ID = GUID.GenerateGUID("p", 16);
+            Number = ++PersonCount;
             Region = region;
-            HexColor = GUID.GenerateHexColor(rMid, gMid, bMid);
+            HexColor = GUID.GenerateHexColor();
             GenerateGenome(HexColor);
             Desirability = CalculateDesirability(region.Value);
             Generation = generation;
@@ -54,6 +57,7 @@ namespace Genetics_Simulation
         {
             Genome = childGenome;
             ID = GUID.GenerateGUID("p", 16);
+            Number = ++PersonCount;
             Region = region;
             HexColor = "None";
             Desirability = CalculateDesirability(region.Value);

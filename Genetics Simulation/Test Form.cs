@@ -7,7 +7,7 @@ namespace Genetics_Simulation
         public TestForm()
         {
             InitializeComponent();
-            Person person = new Person(50, 1, new KeyValuePair<string, int>("r-00", 0), random.Next(0, 255), random.Next(0, 255), random.Next(0, 255));
+            Person person = new Person(50, 1, new KeyValuePair<string, int>("r-00", 0));
             AppendColoredText("Person ID: " + person.ID + "\n", "#000000");
             AppendColoredText("Region ID: " + person.Region + "\n", "#000000");
             AppendColoredText("Gender: " + person.Gender + "\n", "#000000");

@@ -52,8 +52,6 @@
             RegionConfigurationGroupBox = new GroupBox();
             BiasVarianceRateNumericUpDown = new NumericUpDown();
             BiasVarianceRateLabel = new Label();
-            EnableRegionalDesirabilityBiasCheckBox = new CheckBox();
-            EnableRegionalDesirabilityBiasLabel = new Label();
             EmigrationRateNumericUpDown = new NumericUpDown();
             EmigrationRateLabel = new Label();
             TotalRegionsNumericUpDown = new NumericUpDown();
@@ -298,23 +296,20 @@
             // 
             RegionConfigurationGroupBox.Controls.Add(BiasVarianceRateNumericUpDown);
             RegionConfigurationGroupBox.Controls.Add(BiasVarianceRateLabel);
-            RegionConfigurationGroupBox.Controls.Add(EnableRegionalDesirabilityBiasCheckBox);
-            RegionConfigurationGroupBox.Controls.Add(EnableRegionalDesirabilityBiasLabel);
             RegionConfigurationGroupBox.Controls.Add(EmigrationRateNumericUpDown);
             RegionConfigurationGroupBox.Controls.Add(EmigrationRateLabel);
             RegionConfigurationGroupBox.Controls.Add(TotalRegionsNumericUpDown);
             RegionConfigurationGroupBox.Controls.Add(TotalRegionsLabel);
             RegionConfigurationGroupBox.Location = new Point(12, 470);
             RegionConfigurationGroupBox.Name = "RegionConfigurationGroupBox";
-            RegionConfigurationGroupBox.Size = new Size(220, 143);
+            RegionConfigurationGroupBox.Size = new Size(220, 112);
             RegionConfigurationGroupBox.TabIndex = 3;
             RegionConfigurationGroupBox.TabStop = false;
             RegionConfigurationGroupBox.Text = "Region Configuration";
             // 
             // BiasVarianceRateNumericUpDown
             // 
-            BiasVarianceRateNumericUpDown.Enabled = false;
-            BiasVarianceRateNumericUpDown.Location = new Point(138, 109);
+            BiasVarianceRateNumericUpDown.Location = new Point(138, 80);
             BiasVarianceRateNumericUpDown.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             BiasVarianceRateNumericUpDown.Name = "BiasVarianceRateNumericUpDown";
             BiasVarianceRateNumericUpDown.Size = new Size(70, 23);
@@ -324,30 +319,11 @@
             // BiasVarianceRateLabel
             // 
             BiasVarianceRateLabel.AutoSize = true;
-            BiasVarianceRateLabel.Location = new Point(6, 111);
+            BiasVarianceRateLabel.Location = new Point(6, 82);
             BiasVarianceRateLabel.Name = "BiasVarianceRateLabel";
             BiasVarianceRateLabel.Size = new Size(125, 15);
             BiasVarianceRateLabel.TabIndex = 13;
             BiasVarianceRateLabel.Text = "Bias Variance Rate (%):";
-            // 
-            // EnableRegionalDesirabilityBiasCheckBox
-            // 
-            EnableRegionalDesirabilityBiasCheckBox.AutoSize = true;
-            EnableRegionalDesirabilityBiasCheckBox.Location = new Point(193, 83);
-            EnableRegionalDesirabilityBiasCheckBox.Name = "EnableRegionalDesirabilityBiasCheckBox";
-            EnableRegionalDesirabilityBiasCheckBox.Size = new Size(15, 14);
-            EnableRegionalDesirabilityBiasCheckBox.TabIndex = 12;
-            EnableRegionalDesirabilityBiasCheckBox.UseVisualStyleBackColor = true;
-            EnableRegionalDesirabilityBiasCheckBox.CheckedChanged += EnableRegionalDesirabilityBiasCheckBox_CheckedChanged;
-            // 
-            // EnableRegionalDesirabilityBiasLabel
-            // 
-            EnableRegionalDesirabilityBiasLabel.AutoSize = true;
-            EnableRegionalDesirabilityBiasLabel.Location = new Point(6, 82);
-            EnableRegionalDesirabilityBiasLabel.Name = "EnableRegionalDesirabilityBiasLabel";
-            EnableRegionalDesirabilityBiasLabel.Size = new Size(181, 15);
-            EnableRegionalDesirabilityBiasLabel.TabIndex = 11;
-            EnableRegionalDesirabilityBiasLabel.Text = "Enable Regional Desirability Bias?";
             // 
             // EmigrationRateNumericUpDown
             // 
@@ -391,7 +367,7 @@
             ExportConfigurationGroupBox.Controls.Add(EnableJSONandLogExportLabel);
             ExportConfigurationGroupBox.Controls.Add(ExportPathTextBox);
             ExportConfigurationGroupBox.Controls.Add(ExportPathLabel);
-            ExportConfigurationGroupBox.Location = new Point(12, 619);
+            ExportConfigurationGroupBox.Location = new Point(12, 588);
             ExportConfigurationGroupBox.Name = "ExportConfigurationGroupBox";
             ExportConfigurationGroupBox.Size = new Size(275, 79);
             ExportConfigurationGroupBox.TabIndex = 4;
@@ -437,7 +413,7 @@
             // 
             // RunSimulationButton
             // 
-            RunSimulationButton.Location = new Point(12, 704);
+            RunSimulationButton.Location = new Point(12, 673);
             RunSimulationButton.Name = "RunSimulationButton";
             RunSimulationButton.Size = new Size(134, 47);
             RunSimulationButton.TabIndex = 5;
@@ -447,7 +423,7 @@
             // 
             // ImportJSONButton
             // 
-            ImportJSONButton.Location = new Point(153, 757);
+            ImportJSONButton.Location = new Point(153, 726);
             ImportJSONButton.Name = "ImportJSONButton";
             ImportJSONButton.Size = new Size(134, 47);
             ImportJSONButton.TabIndex = 8;
@@ -457,7 +433,7 @@
             // 
             // ViewTableButton
             // 
-            ViewTableButton.Location = new Point(152, 704);
+            ViewTableButton.Location = new Point(152, 673);
             ViewTableButton.Name = "ViewTableButton";
             ViewTableButton.Size = new Size(134, 47);
             ViewTableButton.TabIndex = 6;
@@ -467,7 +443,7 @@
             // 
             // ResetDefaultsButton
             // 
-            ResetDefaultsButton.Location = new Point(12, 757);
+            ResetDefaultsButton.Location = new Point(12, 726);
             ResetDefaultsButton.Name = "ResetDefaultsButton";
             ResetDefaultsButton.Size = new Size(134, 47);
             ResetDefaultsButton.TabIndex = 7;
@@ -480,7 +456,7 @@
             LoggingRichTextBox.Location = new Point(6, 22);
             LoggingRichTextBox.Name = "LoggingRichTextBox";
             LoggingRichTextBox.ReadOnly = true;
-            LoggingRichTextBox.Size = new Size(714, 764);
+            LoggingRichTextBox.Size = new Size(728, 733);
             LoggingRichTextBox.TabIndex = 9;
             LoggingRichTextBox.Text = "";
             // 
@@ -489,7 +465,7 @@
             Logging.Controls.Add(LoggingRichTextBox);
             Logging.Location = new Point(293, 12);
             Logging.Name = "Logging";
-            Logging.Size = new Size(726, 792);
+            Logging.Size = new Size(740, 761);
             Logging.TabIndex = 9;
             Logging.TabStop = false;
             Logging.Text = "Logging";
@@ -593,7 +569,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1031, 817);
+            ClientSize = new Size(1045, 784);
             Controls.Add(ThresholdConfigurationGroupBox);
             Controls.Add(Logging);
             Controls.Add(ResetDefaultsButton);
@@ -657,12 +633,10 @@
         private GroupBox RegionConfigurationGroupBox;
         private NumericUpDown TotalRegionsNumericUpDown;
         private Label TotalRegionsLabel;
-        private Label EnableRegionalDesirabilityBiasLabel;
         private NumericUpDown EmigrationRateNumericUpDown;
         private Label EmigrationRateLabel;
         private NumericUpDown BiasVarianceRateNumericUpDown;
         private Label BiasVarianceRateLabel;
-        private CheckBox EnableRegionalDesirabilityBiasCheckBox;
         private GroupBox ExportConfigurationGroupBox;
         private TextBox ExportPathTextBox;
         private Label ExportPathLabel;

@@ -67,7 +67,6 @@ namespace Genetics_Simulation
             Simulation.Inbreeding = EnableInbreedingComboBox.Text;
             Simulation.CrossRegionBreeding = EnableCrossRegionBreedingCheckBox.Checked;
             Simulation.SameGenderBreeding = EnableSameGenderBreedingCheckBox.Checked;
-            Simulation.EnableDesirabilityBias = EnableRegionalDesirabilityBiasCheckBox.Checked;
             Simulation.EnableJSONExport = EnableJSONandLogExportCheckBox.Checked;
             Simulation.JSONExportPath = ExportPathTextBox.Text;
 
@@ -76,6 +75,7 @@ namespace Genetics_Simulation
             GUID.ClearUsedGUIDs();
             Simulation.Population.Clear();
             Simulation.RegionList.Clear();
+            Person.PersonCount = 0;
             await Task.Run(() => Simulation.RunSimulation());
 
             if (Simulation.EnableJSONExport)
@@ -111,7 +111,6 @@ namespace Genetics_Simulation
 
             TotalRegionsNumericUpDown.Value = Simulation.GetTotalRegionsDefault();
             EmigrationRateNumericUpDown.Value = Simulation.GetEmigrationChanceDefault();
-            EnableRegionalDesirabilityBiasCheckBox.Checked = Simulation.GetEnableDesirabilityBiasDefault();
             BiasVarianceRateNumericUpDown.Value = Simulation.GetBiasVarianceChanceDefault();
 
             EnableJSONandLogExportCheckBox.Checked = Simulation.GetEnableJSONExportDefault();
@@ -122,6 +121,7 @@ namespace Genetics_Simulation
             GUID.ClearUsedGUIDs();
             Simulation.Population.Clear();
             Simulation.RegionList.Clear();
+            Person.PersonCount = 0;
             _tableDataForm.RefreshPersonList();
         }
 
@@ -205,12 +205,6 @@ namespace Genetics_Simulation
                     else Simulation.Log($"No population data found in {selectedFilePath}.");
                 }
             }
-        }
-
-        private void EnableRegionalDesirabilityBiasCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            bool isChecked = EnableRegionalDesirabilityBiasCheckBox.Checked;
-            BiasVarianceRateNumericUpDown.Enabled = isChecked;
         }
 
         private void EnableJSONExportCheckBox_CheckedChanged(object sender, EventArgs e)

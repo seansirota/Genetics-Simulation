@@ -16,7 +16,7 @@ namespace Genetics_Simulation
         {
             InitializeComponent();
 
-            Person person = new Person(50, 1, new KeyValuePair<string, int>("r-00", 0), Simulation.Random.Next(0, 255), Simulation.Random.Next(0, 255), Simulation.Random.Next(0, 255));
+            Person person = new Person(50, 1, new KeyValuePair<string, int>("r-00", 0));
             ChromosomePainterPanel painter = new ChromosomePainterPanel(person);
 
             ClientSize = painter.GetRequiredSize();
@@ -126,17 +126,20 @@ namespace Genetics_Simulation
             g.FillRectangle(geneBrush, x, y, _geneWidth, _geneHeight);
             g.DrawRectangle(Pens.Black, x, y, _geneWidth, _geneHeight);
 
-            string text = gene.Trait;
+            string trait = gene.Trait;
+            string desirability = gene.Desirability.ToString();
 
             for (int dx = -1; dx <= 1; dx++)
             {
                 for (int dy = -1; dy <= 1; dy++)
                 {
-                    g.DrawString(text, font, Brushes.Black, x + 8 + dx, y + 14 + dy);
+                    g.DrawString(trait, font, Brushes.Black, x + 8 + dx, y + 6 + dy);
+                    g.DrawString(desirability, font, Brushes.Black, x + 28 + dx, y + 22 + dy);
                 }
             }
 
-            g.DrawString(text, font, textBrush, x + 8, y + 14);
+            g.DrawString(trait, font, textBrush, x + 8, y + 6);
+            g.DrawString(desirability, font, textBrush, x + 28, y + 22);
         }
 
         private Size CalculateRequiredSize()

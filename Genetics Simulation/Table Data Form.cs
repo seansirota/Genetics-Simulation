@@ -100,6 +100,7 @@ namespace Genetics_Simulation
             _dataGrid.AutoGenerateColumns = false;
             (string PropertyName, string HeaderText)[] _columns = new (string PropertyName, string HeaderText)[]
             {
+                    ("Number", "#"),
                     ("ID", "Person ID"),
                     ("Gender", "Gender"),
                     ("Generation", "Generation"),

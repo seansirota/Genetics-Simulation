@@ -26,7 +26,6 @@ namespace Genetics_Simulation
         private static readonly int _mutationVarianceChanceDefault = 0;
         private static readonly bool _crossRegionBreedingDefault = false;
         private static readonly bool _sameGenderBreedingDefault = false;
-        private static readonly bool _enableDesirabilityBiasDefault = false;
         private static readonly bool _enableJSONExportDefault = false;
         private static readonly string _jsonExportPath = string.Concat(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents"), "\\Genetics Simulation\\");
         private static readonly List<string> _enableInbreedingDefault = new List<string> { "No", "Up to cousins", "Up to siblings" };
@@ -53,7 +52,6 @@ namespace Genetics_Simulation
         public static int MutationVarianceChance { get; set; }
         public static bool CrossRegionBreeding { get; set; }
         public static bool SameGenderBreeding { get; set; }
-        public static bool EnableDesirabilityBias { get; set; }
         public static bool EnableJSONExport { get; set; }
         public static string? JSONExportPath { get; set; }
         public static string? Inbreeding { get; set; }
@@ -69,6 +67,7 @@ namespace Genetics_Simulation
 
             for (; _currentGeneration < TotalGenerations; _currentGeneration++)
             {
+                if (_remainingPopulation.Count(p => p.Generation == _currentGeneration) <= 1) break;
                 Log($"Generation {_currentGeneration + 1} started.");
                 while (_remainingPopulation.Count > 0)
                 {
@@ -77,7 +76,6 @@ namespace Genetics_Simulation
 
                 Log($"Generation {_currentGeneration + 1} completed.");
                 _remainingPopulation = new List<Person>(Population);
-                if (_remainingPopulation.Count == 0) break;
             }
 
             Log($"Simulation{SimulationName} completed.");
@@ -101,17 +99,16 @@ namespace Genetics_Simulation
                     regionID = GUID.GenerateGUID("r", 2);
                 } while (RegionList.ContainsKey(regionID));
 
-                if (EnableDesirabilityBias) RegionList.Add(regionID, Random.Next(0 - BiasVarianceChance, 0 + BiasVarianceChance + 1));
-                else RegionList.Add(regionID, 0);
+                RegionList.Add(regionID, Random.Next(0 - BiasVarianceChance, 0 + BiasVarianceChance + 1));
             }
 
             for (int i = 0; i < InitialPopulation; i++)
             {
                 region = RegionList.ElementAt(Random.Next(0, TotalRegions));
 
-                Person person = new Person(GenderRatio, _currentGeneration, region, Random.Next(0, 255), Random.Next(0, 255), Random.Next(0, 255));
+                Person person = new Person(GenderRatio, _currentGeneration, region);
                 Population.Add(person);
-                Log($"Person {person.ID} generated. Generation: {person.Generation}, Gender: {person.Gender}, Region: {person.Region.Key}, Desirability: {person.Desirability}.");
+                Log($"Person #{person.Number} {person.ID} generated. Generation: {person.Generation}, Gender: {person.Gender}, Region: {person.Region.Key}, Desirability: {person.Desirability}.");
             }
         }
 
@@ -226,7 +223,7 @@ namespace Genetics_Simulation
                 child = new Person(childGenome, parents.Item1.ID, parents.Item2.ID, generation + 1, GenderRatio, region);
                 child.EmigrationEvent = emigrationEvent;
                 if (emigrationEvent) Log($"Emigration event occurred by Person {child.ID} to Region {region.Key}!");
-                Log($"Person {child.ID} generated. Generation: {child.Generation}, Gender: {child.Gender}, Region: {child.Region.Key}, Desirability: {child.Desirability}.");
+                Log($"Person #{child.Number} {child.ID} generated. Generation: {child.Generation}, Gender: {child.Gender}, Region: {child.Region.Key}, Desirability: {child.Desirability}.");
                 children.Add(child);
             }
             
@@ -375,11 +372,6 @@ namespace Genetics_Simulation
         public static int GetMutationVarianceChanceDefault()
         {
             return _mutationVarianceChanceDefault;
-        }
-
-        public static bool GetEnableDesirabilityBiasDefault()
-        {
-            return _enableDesirabilityBiasDefault;
         }
 
         public static bool GetEnableJSONExportDefault()
