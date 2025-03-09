@@ -69,3 +69,8 @@ This project simulates genetic evolution over multiple generations. It models th
 
 - .NET 9
 - C# 13.0
+
+## Credits
+This application and the logo was designed by me, Sean Sirota. Any unauthorized use or credit of this application without my consent would be considered an act of plagiarism and theft.
+
+© 2023 Sean Sirota
