@@ -80,7 +80,7 @@ namespace Genetics_Simulation
 
             Log($"Simulation{SimulationName} completed.");
             Log("Total population: " + Population.Count + ".");
-            Log("Total generations: " + TotalGenerations + ".");
+            Log("Total generations: " + _currentGeneration + ".");
             Log("Total mutations: " + Chromosome.TotalMutations + ".");
             Log("Total recombinations: " + Chromosome.TotalRecombinations + ".");
             Log("Total emigrations: " + TotalEmigrations + ".");
