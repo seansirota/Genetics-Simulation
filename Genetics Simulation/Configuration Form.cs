@@ -194,9 +194,13 @@ namespace Genetics_Simulation
                         Simulation.Population = importedPopulation;
                         Simulation.RegionList = Simulation.Population.Select(p => p.Region).Distinct().ToDictionary();
                         _tableDataForm.RefreshPersonList();
+
                         Simulation.Log($"Population data imported from {selectedFilePath}.");
                         Simulation.Log("Total population: " + Simulation.Population.Count + ".");
                         Simulation.Log("Total generations: " + Simulation.Population.Select(p => p.Generation).Distinct().Count() + ".");
+                        Simulation.Log("Total mutations: " + Simulation.Population.SelectMany(p => p.Genome).SelectMany(c => c.MChromatid.Concat(c.FChromatid)).Count(g => g.MutationEvent) + ".");
+                        Simulation.Log("Total recombinations: " + Simulation.Population.SelectMany(p => p.Genome).Count(c => c.RecombinationEvent) + ".");
+                        Simulation.Log("Total emigrations: " + Simulation.Population.Count(p => p.EmigrationEvent) + ".");
                     }
                     else Simulation.Log($"No population data found in {selectedFilePath}.");
                 }
