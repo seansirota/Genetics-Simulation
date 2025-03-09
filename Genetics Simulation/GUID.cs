@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Genetics_Simulation
 {
+    //The GUID class which generates unique identifiers for genes, chromosomes, people, and hex colors. It stores all used GUIDs and colors to prevent duplicates.
     public class GUID
     {
         private static HashSet<string> _usedGUIDs = new HashSet<string>();
         private static List<string> _usedColors = new List<string>();
 
+        //Generates a unique identifier based on a prefix and length. The prefix is used to identify the type of object the GUID is for and the length is the number of characters in the GUID.
         public static string GenerateGUID(string prefix, int length)
         {
             string newGUID;
@@ -27,6 +29,7 @@ namespace Genetics_Simulation
             return newGUID;
         }
 
+        //Generates a unique hex color string. The color is generated randomly and stored to prevent duplicates.
         public static string GenerateHexColor()
         {
             string hexColor;
@@ -46,6 +49,7 @@ namespace Genetics_Simulation
             return hexColor;
         }
 
+        //Clears all used GUIDs and colors from the GUID class.
         public static void ClearUsedGUIDs()
         {
             _usedGUIDs.Clear();

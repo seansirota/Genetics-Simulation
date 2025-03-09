@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Genetics_Simulation
 {
+    //The gene class which is the most foundation unit of genetic information in the simulation. Each gene contains a trait, a chromosome position, a gene position, a hex color, and a desirability value.
     public class Gene
     {
         public string ID { get; set; }
@@ -16,6 +17,7 @@ namespace Genetics_Simulation
         public int Desirability { get; set; }
         public bool MutationEvent { get; set; }
 
+        //Unused default constructor for the gene class.
         public Gene()
         {
             ID = string.Empty;
@@ -26,6 +28,7 @@ namespace Genetics_Simulation
             Desirability = 0;
         }
 
+        //Constructor for the gene class used during the initial population generation. Generates a gene based on the chromosome position, gene position, and a hex color string.
         public Gene(int cPos, int gPos, string hexColor)
         {
             ID = GUID.GenerateGUID("g", 16);
@@ -36,6 +39,7 @@ namespace Genetics_Simulation
             Desirability = Simulation.Random.Next(Simulation.MinimumDesirability, Simulation.MaximumDesirability + 1);
         }
 
+        //Constructor for the gene class used during the reproduction process. Generates a gene based on an existing gene object.
         public Gene(Gene g)
         {
             ID = GUID.GenerateGUID("g", 16);

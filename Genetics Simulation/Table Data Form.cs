@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+﻿using System.Data;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Genetics_Simulation
 {
+    // Form for displaying a table of person data.
     public partial class TableDataForm : Form
     {
         private DataGridView _dataGrid;
         private Dictionary<string, PropertyInfo> _propertyCache = new Dictionary<string, PropertyInfo>();
         private static List<Person> _population = new List<Person>();
 
+        //Constructor for the table data form. Sets properties upon instantiation and handling double-click, sort, and scroll events.
         public TableDataForm(List<Person> population)
         {
             InitializeComponent();
@@ -49,6 +43,7 @@ namespace Genetics_Simulation
             Load += (s, e) => ResizeFormToFitGrid();
         }
 
+        //Event handler used for filling table cells with data based on the person object being displayed.
         private void DataGrid_CellValueNeeded(object? sender, DataGridViewCellValueEventArgs e)
         {
             if (e.RowIndex >= 0 && e.RowIndex < _population.Count)
@@ -80,6 +75,7 @@ namespace Genetics_Simulation
             }
         }
 
+        //Event handler for sorting the table data based on the column header clicked.
         private void DataGrid_ColumnHeaderMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
         {
             string columnName = _dataGrid.Columns[e.ColumnIndex].DataPropertyName;
@@ -95,6 +91,7 @@ namespace Genetics_Simulation
             _dataGrid.Invalidate();
         }
 
+        //Configures the columns of the table data form to display.
         private void ConfigureColumns()
         {
             _dataGrid.AutoGenerateColumns = false;
@@ -122,6 +119,7 @@ namespace Genetics_Simulation
             }
         }
 
+        //Refreshes the person list in the table data form and redraws the table form.
         public void RefreshPersonList()
         {
             if (InvokeRequired)
@@ -135,6 +133,7 @@ namespace Genetics_Simulation
             ResizeFormToFitGrid();
         }
 
+        //Event handler for when a cell is double-clicked. Opens a new chromosome painter form for the person.
         private void DataGrid_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
@@ -166,6 +165,7 @@ namespace Genetics_Simulation
             }
         }
 
+        //Resizes the form to fit the grid based on the widths of the person objects properties being displayed.
         private void ResizeFormToFitGrid()
         {
             int totalColumnWidth = _dataGrid.Columns.Cast<DataGridViewColumn>().Sum(c => c.Width);
@@ -174,6 +174,7 @@ namespace Genetics_Simulation
             ClientSize = new Size(totalColumnWidth + formPadding, Math.Max(minHeight, ClientSize.Height));
         }
 
+        //Event handler for when the form is closed. Disposes of the form.
         private void TableDataForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             ((Form)sender).Dispose();

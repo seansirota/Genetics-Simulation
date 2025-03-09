@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
 
 namespace Genetics_Simulation
 {
+    //The Chromosome Painter Form is a class for the form to display the chromosomes of a person object. It displays some general info for the person at the top as well as showing each chromosome by the gene.
     public partial class ChromosomePainterForm: Form
     {
+        //Constructor for the Chromosome Painter Form. Creates a new person object with default values and displays the chromosomes.
         public ChromosomePainterForm()
         {
             InitializeComponent();
@@ -25,6 +19,7 @@ namespace Genetics_Simulation
             Controls.Add(painter);
         }
 
+        //Constructor for the Chromosome Painter Form. Creates a new person object with the given person object and displays the chromosomes. This gets accessed from the table form.
         public ChromosomePainterForm(Person person)
         {
             InitializeComponent();
@@ -35,12 +30,14 @@ namespace Genetics_Simulation
             Controls.Add(painter);
         }
 
+        //Event handler for when the form is closed. Disposes of the form.
         private void ChromosomePainterForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             ((Form)sender).Dispose();
         }
     }
 
+    //This is the class that draws the chromosomes of a person object. It is a panel that displays the chromosomes by gene.
     public class ChromosomePainterPanel : Panel
     {
         private Person _person;
@@ -53,6 +50,7 @@ namespace Genetics_Simulation
         private int _chromatidSpacing = 5;
         private int _chromosomeSpacing = 30;
 
+        //Default constructor for the Chromosome Painter Panel. Unused but creates a blank new person object.
         public ChromosomePainterPanel()
         {
             _person = new Person();
@@ -61,6 +59,7 @@ namespace Genetics_Simulation
             AutoScroll = true;
         }
 
+        //Used by the application to create a new Chromosome Painter Panel with the given person object.
         public ChromosomePainterPanel(Person person)
         {
             _person = person;
@@ -69,18 +68,21 @@ namespace Genetics_Simulation
             AutoScroll = true;
         }
 
+        //Draws the chromosomes on the panel.
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
             DrawChromosomes(e.Graphics);
         }
 
+        //Event handler for when the panel is scrolled. Invalidates the panel to redraw the chromosomes.
         protected override void OnScroll(ScrollEventArgs se)
         {
             base.OnScroll(se);
             Invalidate();
         }
 
+        //Draws the chromosomes and genes dynamically given their properties.
         private void DrawChromosomes(Graphics g)
         {
             int startY = _startY;
@@ -116,6 +118,7 @@ namespace Genetics_Simulation
             }
         }
 
+        //Draws individual genes on the panel. Displays the gene color, trait ID, and desirability.
         private void DrawGene(Gene gene, int x, int y, Graphics g)
         {
             Color geneColor = ColorTranslator.FromHtml(gene.HexColor);
@@ -142,6 +145,7 @@ namespace Genetics_Simulation
             g.DrawString(desirability, font, textBrush, x + 28, y + 22);
         }
 
+        //Calculates the required size of the panel based on the number of chromosomes and genes.
         private Size CalculateRequiredSize()
         {
             int maxGenesPerChromosome = _chromosomes.Max(c => Math.Max(c.MChromatid.Count, c.FChromatid.Count));
@@ -154,6 +158,7 @@ namespace Genetics_Simulation
             return new Size(requiredWidth, requiredHeight);
         }
 
+        //Returns the required size of the panel. Public method used to set the size of the panel.
         public Size GetRequiredSize()
         {
             return CalculateRequiredSize();

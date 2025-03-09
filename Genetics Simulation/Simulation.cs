@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Genetics_Simulation
 {
+    //This class handles most of the logic involved with running the simulation.
     static public class Simulation
     {
         private static readonly int _initialPopulationDefault = 100;
@@ -57,6 +58,7 @@ namespace Genetics_Simulation
         public static string? Inbreeding { get; set; }
         public static string? SimulationName { get; set; }
 
+        //This method initializes the simulation with the given parameters, creates new person objects by generation, and logs when the simulation is completed and gives some stats at the end.
         public static void RunSimulation()
         {
             SimulationName = GUID.GenerateGUID(string.Empty, 8);
@@ -86,6 +88,7 @@ namespace Genetics_Simulation
             Log("Total emigrations: " + TotalEmigrations + ".");
         }
 
+        //This method generates the initial population of the simulation.
         private static void GenerateInitialRound()
         {
             KeyValuePair<string, int> region;
@@ -112,6 +115,7 @@ namespace Genetics_Simulation
             }
         }
 
+        //This method goes through the process of finding two potential parents after passing desirability checks, then breeds them to create children person objects.
         private static void BreedNewPerson(int generation)
         {
             Person? person1;
@@ -163,6 +167,7 @@ namespace Genetics_Simulation
             RemovePersons(originalPopulation, totalRemovePersons);
         }
 
+        //This method removes the persons that were not chosen to breed from the original population.
         private static void RemovePersons(List<Person> originalPopulation, List<Person> totalRemovePersons)
         {
             if (originalPopulation.Count > 1)
@@ -177,6 +182,7 @@ namespace Genetics_Simulation
             _remainingPopulation = new List<Person>(originalPopulation);
         }
 
+        //This method combines the genomes of two parents to create children person objects.
         private static List<Person> CombineGenomes(Person person1, Person person2, int generation)
         {
             KeyValuePair<string, int> region = new KeyValuePair<string, int>();
@@ -230,6 +236,7 @@ namespace Genetics_Simulation
             return children;
         }
 
+        //Used to get the region of the child. Also handles emigration events.
         private static Tuple<KeyValuePair<string, int>, bool> GetRegion(Person person1, Person person2)
         {
             int emigrationThreshold = Random.Next(1, 101);
@@ -252,7 +259,7 @@ namespace Genetics_Simulation
             return Tuple.Create(Random.Next(0, 101) < 50 ? person1.Region : person2.Region, EmigrationEvent);
         }
 
-
+        //Used to get the parents of the child.
         private static Tuple<Person, Person> GetParents(Person person1, Person person2)
         {
             if (person1.Gender == "Male" && person2.Gender == "Female") return Tuple.Create(person1, person2);
@@ -260,6 +267,7 @@ namespace Genetics_Simulation
             else return Tuple.Create(person1, person2);
         }
 
+        //This method chooses a valid person to breed based on desirability checks.
         private static Tuple<Person?, List<Person>> ChooseValidPerson()
         {
             int desirabilityThreshold;
@@ -289,96 +297,115 @@ namespace Genetics_Simulation
             return Tuple.Create(randomPerson, removePersons);
         }
 
+        //This method logs messages to the console and subscribes to the OnLogEvent event.
         public static void Log(string message)
         {
             OnLogEvent?.Invoke($"{DateTime.Now}: {message}");
         }
 
+        //This method gets the default vavlue for the initial population.
         public static int GetInitialPopulationDefault()
         {
             return _initialPopulationDefault;
         }
 
+        //This method gets the default value for the total generations.
         public static int GetTotalGenerationsDefault()
         {
             return _totalGenerationsDefault;
         }
 
+        //This method gets the default value for the recombination chance.
         public static int GetRecombinationChanceDefault()
         {
             return _recombinationChanceDefault;
         }
 
+        //This method gets the default value for the mutation chance.
         public static int GetMutationChanceDefault()
         {
             return _mutationChanceDefault;
         }
 
+        //This method gets the default gender ratio.
         public static int GetGenderRatioDefault()
         {
             return _genderRatioDefault;
         }
 
+        //This method gets the default state for inbreeding permission.
         public static List<string> GetEnableInbreedingDefault()
         {
             return _enableInbreedingDefault;
         }
 
+        //This method gets the default value for the total regions.
         public static int GetTotalRegionsDefault()
         {
             return _totalRegionsDefault;
         }
 
+        //This method gets the default value for the emigration chance.
         public static int GetEmigrationChanceDefault()
         {
             return _emigrationChanceDefault;
         }
 
+        //This methods gets the default value for regional desirability bias amount.
         public static int GetBiasVarianceChanceDefault()
         {
             return _biasVarianceChanceDefault;
         }
 
+        //This method gets the default value for cross-region breeding permission.
         public static bool GetCrossRegionBreedingDefault()
         {
             return _crossRegionBreedingDefault;
         }
 
+        //This method gets the default state for same-gender breeding permission.
         public static bool GetSameGenderBreedingDefault()
         {
             return _sameGenderBreedingDefault;
         }
 
+        //This method gets the default minimum desirability value.
         public static int GetMinimumDesirabilityDefault()
         {
             return _minimumDesirabilityDefault;
         }
 
+        //This method gets the default maximum desirability value.
         public static int GetMaximumDesirabilityDefault()
         {
             return _maximumDesirabilityDefault;
         }
 
+        //This method gets the default minimum children value.
         public static int GetMinimumChildrenDefault()
         {
             return _minimumChildrenDefault;
         }
 
+        //This method gets the default maximum children value.
         public static int GetMaximumChildrenDefault()
         {
             return _maximumChildrenDefault;
         }
 
+        //This method gets the default mutation variance amount value.
         public static int GetMutationVarianceChanceDefault()
         {
             return _mutationVarianceChanceDefault;
         }
 
+        //This method gets the default state for JSON export permission.
         public static bool GetEnableJSONExportDefault()
         {
             return _enableJSONExportDefault;
         }
 
+        //This method gets the default JSON export path.
         public static string GetJSONExportPathDefault()
         {
             return _jsonExportPath;

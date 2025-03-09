@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Genetics_Simulation
 {
+    //This is the person class, which is the main object type and represents people with their own properties and genomes.
     public class Person
     {
         public static int PersonCount;
@@ -22,6 +23,7 @@ namespace Genetics_Simulation
         public bool EmigrationEvent { get; set; }
         public List<Chromosome> Genome = new List<Chromosome>();
 
+        //Default constructor for the person class. Initializes the properties to default values.
         public Person()
         {
             ID = string.Empty;
@@ -34,6 +36,7 @@ namespace Genetics_Simulation
             MotherID = string.Empty;
         }
 
+        //Constructor for a person object used during the initial population generation.
         public Person(int genderRatio, int generation, KeyValuePair<string, int> region)
         {
             ID = GUID.GenerateGUID("p", 16);
@@ -53,6 +56,7 @@ namespace Genetics_Simulation
             MotherID = "None";
         }
 
+        //Constructor for a person object used during the reproduction process.
         public Person(List<Chromosome> childGenome, string parent1ID, string parent2ID, int generation, int genderRatio, KeyValuePair<string, int> region)
         {
             Genome = childGenome;
@@ -72,6 +76,7 @@ namespace Genetics_Simulation
             MotherID = parent2ID;
         }
 
+        //Generates the genome for a person object based on a hex color string. Used only for the initial population generation.
         private void GenerateGenome(string hexColor)
         {
             Chromosome chromosome;
@@ -83,6 +88,7 @@ namespace Genetics_Simulation
             }
         }
 
+        //Calculates the desirability of a person object and is influenced by the regional desirability bias.
         private int CalculateDesirability(int desirabilityBias)
         {
             double totalDesirability = 0;

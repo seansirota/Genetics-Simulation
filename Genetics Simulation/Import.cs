@@ -8,8 +8,10 @@ using Microsoft.VisualBasic.Logging;
 
 namespace Genetics_Simulation
 {
+    // Import class to import population data from a JSON file.
     public static class Import
     {
+        // This method is used to import population data from a JSON file.
         public static async Task<List<Person>> ImportData(string filePath)
         {
             if (!File.Exists(filePath)) return new List<Person>();

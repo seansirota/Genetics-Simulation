@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Genetics_Simulation
 {
+    //The chromosome class which contains the genes for a person. Every chromosome contains a different amount of genes which are contained with a maternal and paternal chromatid.
     public class Chromosome
     {
         public string ID { get; set; }
@@ -23,11 +24,13 @@ namespace Genetics_Simulation
             {5, 4 }
         };
 
+        //Unused default constructor for the chromosome class.
         public Chromosome()
         {
             ID = string.Empty;
         }
 
+        //Constructor for the chromosome class used during the initial population generation. Generates the genes for the chromosome based on the chromosome position and a hex color string.
         public Chromosome(int cPos, string hexColor)
         {
             ID = GUID.GenerateGUID("c", 16);
@@ -35,6 +38,7 @@ namespace Genetics_Simulation
             GenerateGenes("Female", cPos, hexColor);
         }
 
+        //Constructor for the chromosome class used during the reproduction process. Generates the genes for the chromosome based on the maternal and paternal chromatids.
         public Chromosome(List<Gene> mChromatid, List<Gene> fChromatid)
         {
             ID = GUID.GenerateGUID("c", 16);
@@ -43,6 +47,7 @@ namespace Genetics_Simulation
             Recombination();
         }
 
+        //Generates a recombination event on the chromosome based on a random threshold. If the threshold is met, the chromatids are recombined at a random point.
         private void Recombination()
         {
             int recombinationThreshold = Simulation.Random.Next(1, 101);
@@ -91,6 +96,7 @@ namespace Genetics_Simulation
             }
         }
 
+        //Generates the genes for the chromosome based on the chromosome position and a hex color string. Used only during the initial population generation.
         private void GenerateGenes(string gender, int cPos, string hexColor)
         {
             Gene gene;
@@ -103,6 +109,7 @@ namespace Genetics_Simulation
             }
         }
 
+        //Generates the genes for the chromosome based on the maternal and paternal chromatids. Used only during the reproduction process.
         private void GenerateGenes(string gender, List<Gene> chromatid)
         {
             Gene gene;

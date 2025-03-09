@@ -1,9 +1,11 @@
 namespace Genetics_Simulation
 {
+    // Test form to test the basic functionalities of the program.
     public partial class TestForm : Form
     {
         private readonly Random random = new Random();
 
+        // Constructor for the test form. Creates a new person object and displays the person's information.
         public TestForm()
         {
             InitializeComponent();
@@ -35,6 +37,7 @@ namespace Genetics_Simulation
             }
         }
 
+        // Appends colored text to the rich text box.
         private void AppendColoredText(string text, string hexColor)
         {
             Color color = ColorTranslator.FromHtml(hexColor);

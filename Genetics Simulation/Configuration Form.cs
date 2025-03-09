@@ -1,23 +1,15 @@
-﻿using Microsoft.VisualBasic.Logging;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
 
 namespace Genetics_Simulation
 {
+    // Configuration form for entering the different settings the users wants to use for running the simulation. Also contains controls for displaying logs, resetting the state of the application, and importing a population file.
     public partial class ConfigurationForm : Form
     {
         private TableDataForm _tableDataForm;
         private int _lastLoggedIndex = 0;
         private readonly object _logLock = new object();
 
+        // Constructor for the Configuration Form. Initializes the form and subscribes to the OnLogEvent event.
         public ConfigurationForm()
         {
             InitializeComponent();
@@ -26,6 +18,7 @@ namespace Genetics_Simulation
             ResetConfigDefaults();
         }
 
+        // Method for getting the file path for exporting files including the population data and logs.
         public static string GetFilePath(string fileType, string fileExtension)
         {
             string? folderPath = Simulation.JSONExportPath;
@@ -47,6 +40,7 @@ namespace Genetics_Simulation
             else return string.Empty;
         }
 
+        // Event handler for the Run Simulation button click event. Disables the button while the simulation is running and runs the simulation on a separate thread. Any previous data prior to running the simulation gets deleted.
         private async void RunSimulationButton_Click(object sender, EventArgs e)
         {
             RunSimulationButton.Enabled = false;
@@ -71,7 +65,6 @@ namespace Genetics_Simulation
             Simulation.JSONExportPath = ExportPathTextBox.Text;
 
             LoggingRichTextBox.Clear();
-
             GUID.ClearUsedGUIDs();
             Simulation.Population.Clear();
             Simulation.RegionList.Clear();
@@ -89,6 +82,7 @@ namespace Genetics_Simulation
             RunSimulationButton.Enabled = true;
         }
 
+        // Method for resetting the configuration form to the default values and deleting any previously saved data.
         private void ResetConfigDefaults()
         {
             InitialPopulationNumericUpDown.Value = Simulation.GetInitialPopulationDefault();
@@ -117,7 +111,6 @@ namespace Genetics_Simulation
             ExportPathTextBox.Text = Simulation.GetJSONExportPathDefault();
 
             LoggingRichTextBox.Clear();
-
             GUID.ClearUsedGUIDs();
             Simulation.Population.Clear();
             Simulation.RegionList.Clear();
@@ -125,6 +118,7 @@ namespace Genetics_Simulation
             _tableDataForm.RefreshPersonList();
         }
 
+        // Method for appending log messages to the logging rich text box and streaming log data in chunks to log file if export logging is enabled.
         private void AppendLog(string message)
         {
             if (LoggingRichTextBox.InvokeRequired)
@@ -166,17 +160,20 @@ namespace Genetics_Simulation
             }
         }
 
+        // Event handler for the View Table button click event. Opens the table data form if it is not already open.
         private void ViewTableButton_Click(object sender, EventArgs e)
         {
             if (_tableDataForm == null || _tableDataForm.IsDisposed) _tableDataForm = new TableDataForm(Simulation.Population);
             if (!_tableDataForm.Visible) _tableDataForm.Show();
         }
 
+        // Event handler for the Reset Defaults button click event. Resets the configuration form to the default values.
         private void ResetDefaultsButton_Click(object sender, EventArgs e)
         {
             ResetConfigDefaults();
         }
 
+        // Event handler for the Import JSON button click event. Opens a file dialog for the user to select a JSON file to import population data from.
         private async void ImportJSONButton_Click(object sender, EventArgs e)
         {
             using(OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -207,32 +204,38 @@ namespace Genetics_Simulation
             }
         }
 
+        // Event handler for the Enable JSON Export check box checked changed event. Enables the export path text box if the check box is checked.
         private void EnableJSONExportCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             bool isChecked = EnableJSONandLogExportCheckBox.Checked;
             ExportPathTextBox.Enabled = isChecked;
         }
 
+        // Event handler for the Minimum Desirability numeric up down value changed event. Ensures the minimum value is less than the maximum value.
         private void MinimumDesirabilityNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             if (MinimumDesirabilityNumericUpDown.Value > MaximumDesirabilityNumericUpDown.Value) MaximumDesirabilityNumericUpDown.Value = MinimumDesirabilityNumericUpDown.Value;
         }
 
+        // Event handler for the Maximum Desirability numeric up down value changed event. Ensures the maximum value is greater than the minimum value.
         private void MaximumDesirabilityNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             if (MaximumDesirabilityNumericUpDown.Value < MinimumDesirabilityNumericUpDown.Value) MinimumDesirabilityNumericUpDown.Value = MaximumDesirabilityNumericUpDown.Value;
         }
 
+        // Event handler for the Minimum Children numeric up down value changed event. Ensures the minimum value is less than the maximum value.
         private void MinimumChildrenNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             if (MinimumChildrenNumericUpDown.Value > MaximumChildrenNumericUpDown.Value) MaximumChildrenNumericUpDown.Value = MinimumChildrenNumericUpDown.Value;
         }
 
+        // Event handler for the Maximum Children numeric up down value changed event. Ensures the maximum value is greater than the minimum value.
         private void MaximumChildrenNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             if (MaximumChildrenNumericUpDown.Value < MinimumChildrenNumericUpDown.Value) MinimumChildrenNumericUpDown.Value = MaximumChildrenNumericUpDown.Value;
         }
 
+        //Event handler for when the Configuration Form is closed. Disposes of the form and exits the application.
         private void ConfigurationForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             ((Form)sender).Dispose();

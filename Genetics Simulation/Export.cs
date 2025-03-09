@@ -9,8 +9,10 @@ using Microsoft.VisualBasic.Logging;
 
 namespace Genetics_Simulation
 {
+    // Export class to export population data to a JSON file.
     public static class Export
     {
+        //Export population data to the given directory. This along with the ExportLog method go into a folder created for this specific simulation run.
         public static void ExportData(List<Person> population, string folderPath)
         {
             try
@@ -41,6 +43,7 @@ namespace Genetics_Simulation
             }
         }
 
+        //Export log data to the given directory. This along with the ExportData method go into a folder created for this specific simulation run.
         public static void ExportLog(int lastLoggedIndex, RichTextBox loggingRichTextBox)
         {
             try
