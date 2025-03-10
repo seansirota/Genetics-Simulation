@@ -40,10 +40,15 @@ namespace Genetics_Simulation
             else return string.Empty;
         }
 
-        // Event handler for the Run Simulation button click event. Disables the button while the simulation is running and runs the simulation on a separate thread. Any previous data prior to running the simulation gets deleted.
+        // Event handler for the Run Simulation button click event. Disposes of any open forms, disables the button while the simulation is running, and runs the simulation on a separate thread. Any previous data prior to running the simulation gets deleted.
         private async void RunSimulationButton_Click(object sender, EventArgs e)
         {
+            DisposeOpenForms();
+
             RunSimulationButton.Enabled = false;
+            ViewTableButton.Enabled = false;
+            ResetDefaultsButton.Enabled = false;
+            ImportJSONButton.Enabled = false;
 
             Simulation.InitialPopulation = (int)InitialPopulationNumericUpDown.Value;
             Simulation.TotalGenerations = (int)TotalGenerationsNumericUpDown.Value;
@@ -80,11 +85,16 @@ namespace Genetics_Simulation
             _tableDataForm.RefreshPersonList();
 
             RunSimulationButton.Enabled = true;
+            ViewTableButton.Enabled = true;
+            ResetDefaultsButton.Enabled = true;
+            ImportJSONButton.Enabled = true;
         }
 
         // Method for resetting the configuration form to the default values and deleting any previously saved data.
         private void ResetConfigDefaults()
         {
+            DisposeOpenForms();
+
             InitialPopulationNumericUpDown.Value = Simulation.GetInitialPopulationDefault();
             TotalGenerationsNumericUpDown.Value = Simulation.GetTotalGenerationsDefault();
             RecombinationRateNumericUpDown.Value = Simulation.GetRecombinationChanceDefault();
@@ -116,6 +126,13 @@ namespace Genetics_Simulation
             Simulation.RegionList.Clear();
             Person.PersonCount = 0;
             _tableDataForm.RefreshPersonList();
+        }
+
+        private void DisposeOpenForms()
+        {
+            List<Form> formsToDispose = new List<Form>();
+            foreach (Form openForm in Application.OpenForms) if (openForm is ChromosomePainterForm || openForm is TableDataForm) formsToDispose.Add(openForm);
+            foreach (Form form in formsToDispose) form.Dispose();
         }
 
         // Method for appending log messages to the logging rich text box and streaming log data in chunks to log file if export logging is enabled.

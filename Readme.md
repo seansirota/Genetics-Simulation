@@ -49,6 +49,7 @@ This project simulates genetic evolution over multiple generations. It models th
    - Double-click a cell in the row of a person object to view their chromosome data.
    - Double-clicking the Father ID or Mother ID cells for a particular person will display the chromosome data for the respective parent.
    - Clicking on the header of a column will sort the table based on that column, alternating between ascending and descending order.
+   - A search bar is available to filter the data by Person ID based on the entered text.
 5. **Visualize Chromosomes**: Use the chromosome painter to visualize the chromosomes of the population.
    - The chromosome painter displays the chromosomes of the population in a graphical format.
    - You can view a person's chromosome painter by double-clicking a cell in their row in the tabular data viewer.

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.ComponentModel;
+using System.Data;
 using System.Reflection;
 
 namespace Genetics_Simulation
@@ -7,14 +8,22 @@ namespace Genetics_Simulation
     public partial class TableDataForm : Form
     {
         private DataGridView _dataGrid;
+        private TextBox _searchTextBox;
+        private Button _searchButton;
         private Dictionary<string, PropertyInfo> _propertyCache = new Dictionary<string, PropertyInfo>();
         private static List<Person> _population = new List<Person>();
+        private BindingSource _bindingSource;
 
-        //Constructor for the table data form. Sets properties upon instantiation and handling double-click, sort, and scroll events.
+        //Constructor for the table data form, search bar, and search button. Sets properties upon instantiation and handling double-click, sort, and scroll events.
         public TableDataForm(List<Person> population)
         {
             InitializeComponent();
             _population = population ?? new List<Person>();
+            _bindingSource = new BindingSource();
+
+            _searchTextBox = new TextBox() { Dock = DockStyle.Top, PlaceholderText = "Enter Person ID" };
+            _searchButton = new Button() { Dock = DockStyle.Top, Text = "Search" };
+            _searchButton.Click += SearchButton_Click;
 
             _dataGrid = new DataGridView()
             {
@@ -32,63 +41,17 @@ namespace Genetics_Simulation
             };
 
             _dataGrid.CellDoubleClick += DataGrid_CellDoubleClick;
-            _dataGrid.CellValueNeeded += DataGrid_CellValueNeeded;
-            _dataGrid.ColumnHeaderMouseClick += DataGrid_ColumnHeaderMouseClick;
 
             ConfigureColumns();
 
-            _dataGrid.RowCount = _population.Count;
+            _bindingSource.DataSource = new SortableBindingList<Person>(_population);
+            _dataGrid.DataSource = _bindingSource;
+
             Controls.Add(_dataGrid);
+            Controls.Add(_searchButton);
+            Controls.Add(_searchTextBox);
 
             Load += (s, e) => ResizeFormToFitGrid();
-        }
-
-        //Event handler used for filling table cells with data based on the person object being displayed.
-        private void DataGrid_CellValueNeeded(object? sender, DataGridViewCellValueEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.RowIndex < _population.Count)
-            {
-                Person person = _population[e.RowIndex];
-                string columnName = _dataGrid.Columns[e.ColumnIndex].DataPropertyName;
-
-                if (!_propertyCache.TryGetValue(columnName, out PropertyInfo? property))
-                {
-                    property = typeof(Person).GetProperty(columnName);
-                    if (property != null)
-                    {
-                        _propertyCache[columnName] = property;
-                    }
-                }
-
-                if (property != null)
-                {
-                    object? value = property.GetValue(person);
-                    if (columnName == "Region" && value is KeyValuePair<string, int> region)
-                    {
-                        e.Value = region.Key;
-                    }
-                    else
-                    {
-                        e.Value = value;
-                    }
-                }
-            }
-        }
-
-        //Event handler for sorting the table data based on the column header clicked.
-        private void DataGrid_ColumnHeaderMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
-        {
-            string columnName = _dataGrid.Columns[e.ColumnIndex].DataPropertyName;
-            bool ascending = _dataGrid.Columns[e.ColumnIndex].Tag as bool? ?? true;
-            _dataGrid.Columns[e.ColumnIndex].Tag = !ascending;
-
-            PropertyInfo? property = typeof(Person).GetProperty(columnName);
-            if (property != null)
-            {
-                _population.Sort((p1, p2) => Comparer<object>.Default.Compare(property.GetValue(p1), property.GetValue(p2)) * (ascending ? 1 : -1));
-            }
-
-            _dataGrid.Invalidate();
         }
 
         //Configures the columns of the table data form to display.
@@ -97,14 +60,14 @@ namespace Genetics_Simulation
             _dataGrid.AutoGenerateColumns = false;
             (string PropertyName, string HeaderText)[] _columns = new (string PropertyName, string HeaderText)[]
             {
-                    ("Number", "#"),
-                    ("ID", "Person ID"),
-                    ("Gender", "Gender"),
-                    ("Generation", "Generation"),
-                    ("Region", "Region"),
-                    ("Desirability", "Desirability"),
-                    ("FatherID", "Father ID"),
-                    ("MotherID", "Mother ID")
+                ("Number", "#"),
+                ("ID", "Person ID"),
+                ("Gender", "Gender"),
+                ("Generation", "Generation"),
+                ("RegionKey", "Region"),
+                ("Desirability", "Desirability"),
+                ("FatherID", "Father ID"),
+                ("MotherID", "Mother ID")
             };
 
             foreach ((string property, string header) in _columns)
@@ -127,9 +90,8 @@ namespace Genetics_Simulation
                 Invoke(new Action(RefreshPersonList));
                 return;
             }
-            _dataGrid.RowCount = _population.Count;
-            _dataGrid.Invalidate();
-            _dataGrid.Refresh();
+
+            _bindingSource.ResetBindings(false);
             ResizeFormToFitGrid();
         }
 
@@ -151,10 +113,7 @@ namespace Genetics_Simulation
                         ChromosomePainterForm painter = new ChromosomePainterForm(parent);
                         painter.Show();
                     }
-                    else
-                    {
-                        MessageBox.Show("Parent not found in population.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    else MessageBox.Show("Parent not found in population.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
@@ -165,12 +124,44 @@ namespace Genetics_Simulation
             }
         }
 
+        //Event handler for search button click.
+        private void SearchButton_Click(object? sender, EventArgs e)
+        {
+            string searchID = _searchTextBox.Text.Trim();
+            if (!string.IsNullOrEmpty(searchID))
+            {
+                List<Person> filteredPopulation = _population.Where(p => p.ID.Contains(searchID, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                if (filteredPopulation.Any()) _bindingSource.DataSource = new SortableBindingList<Person>(filteredPopulation);
+                else
+                {
+                    MessageBox.Show("Person ID not found.", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    _bindingSource.DataSource = new SortableBindingList<Person>(_population);
+                }
+            }
+            else _bindingSource.DataSource = new SortableBindingList<Person>(_population);
+
+            _dataGrid.DataSource = _bindingSource;
+        }
+
+
+        //Event handler for Enter key press in search text box.
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Enter)
+            {
+                SearchButton_Click(this, EventArgs.Empty);
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         //Resizes the form to fit the grid based on the widths of the person objects properties being displayed.
         private void ResizeFormToFitGrid()
         {
             int totalColumnWidth = _dataGrid.Columns.Cast<DataGridViewColumn>().Sum(c => c.Width);
             int formPadding = 20;
-            int minHeight = 300;
+            int minHeight = 400;
             ClientSize = new Size(totalColumnWidth + formPadding, Math.Max(minHeight, ClientSize.Height));
         }
 
@@ -178,6 +169,42 @@ namespace Genetics_Simulation
         private void TableDataForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             ((Form)sender).Dispose();
+        }
+    }
+
+    //Sortable binding list class for sorting.
+    public class SortableBindingList<T> : BindingList<T>
+    {
+        private ListSortDirection _sortDirection;
+        private PropertyDescriptor? _sortProperty;
+
+        public SortableBindingList() : base() { }
+
+        public SortableBindingList(IList<T> list) : base(list) { }
+
+        protected override bool SupportsSortingCore => true;
+        protected override bool IsSortedCore => _sortProperty != null;
+        protected override ListSortDirection SortDirectionCore => _sortDirection;
+        protected override PropertyDescriptor? SortPropertyCore => _sortProperty;
+
+        //Applies the sort to the list.
+        protected override void ApplySortCore(PropertyDescriptor prop, ListSortDirection direction)
+        {
+            if (prop == null) return;
+
+            List<T>? items = Items as List<T>;
+            if (items == null) return;
+
+            items.Sort((x, y) =>
+            {
+                object? xValue = prop.GetValue(x);
+                object? yValue = prop.GetValue(y);
+                return direction == ListSortDirection.Ascending ? Comparer<object>.Default.Compare(xValue, yValue) : Comparer<object>.Default.Compare(yValue, xValue);
+            });
+
+            _sortProperty = prop;
+            _sortDirection = direction;
+            ResetBindings();
         }
     }
 }

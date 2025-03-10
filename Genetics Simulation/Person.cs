@@ -15,6 +15,7 @@ namespace Genetics_Simulation
         public int Number { get; set; }
         public string Gender { get; set; }
         public KeyValuePair<string, int> Region { get; set; }
+        public string RegionKey => Region.Key;
         public string HexColor { get; set; }
         public int Desirability { get; set; }
         public int Generation { get; set; }
