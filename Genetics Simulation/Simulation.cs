@@ -18,7 +18,7 @@ namespace Genetics_Simulation
         private static readonly int _mutationChanceDefault = 1;
         private static readonly int _genderRatioDefault = 50;
         private static readonly int _totalRegionsDefault = 2;
-        private static readonly int _emigrationChanceDefault = 5;
+        private static readonly int _emigrationChanceDefault = 2;
         private static readonly int _biasVarianceChanceDefault = 0;
         private static readonly int _minimumDesirabilityDefault = 60;
         private static readonly int _maximumDesirabilityDefault = 100;

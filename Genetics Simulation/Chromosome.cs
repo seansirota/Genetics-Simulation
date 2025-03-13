@@ -117,7 +117,7 @@ namespace Genetics_Simulation
 
             foreach (Gene g in chromatid)
             {
-                int mutationThreshold = Simulation.Random.Next(1, 101);
+                int mutationThreshold = Simulation.Random.Next(1, 10001);
                 if (mutationThreshold <= Simulation.MutationChance)
                 {
                     gene = new Gene(g.CPos, g.GPos, GUID.GenerateHexColor());

@@ -146,9 +146,9 @@
             MutationRateLabel.AutoSize = true;
             MutationRateLabel.Location = new Point(6, 106);
             MutationRateLabel.Name = "MutationRateLabel";
-            MutationRateLabel.Size = new Size(106, 15);
+            MutationRateLabel.Size = new Size(115, 15);
             MutationRateLabel.TabIndex = 6;
-            MutationRateLabel.Text = "Mutation Rate (%):";
+            MutationRateLabel.Text = "Mutation Rate (‱):";
             // 
             // RecombinationRateNumericUpDown
             // 
