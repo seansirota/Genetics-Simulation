@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -27,7 +28,12 @@ namespace Genetics_Simulation
         private static readonly int _mutationVarianceChanceDefault = 0;
         private static readonly bool _crossRegionBreedingDefault = false;
         private static readonly bool _sameGenderBreedingDefault = false;
+        private static readonly bool _enableLoggingDefault = true;
+        private static readonly bool _logPersonsDefault = true;
+        private static readonly bool _logGenerationsDefault = true;
+        private static readonly bool _logEventsDefault = true;
         private static readonly bool _enableJSONExportDefault = false;
+        private static readonly bool _enableLogExportDefault = false;
         private static readonly string _jsonExportPath = string.Concat(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents"), "\\Genetics Simulation\\");
         private static readonly List<string> _enableInbreedingDefault = new List<string> { "No", "Up to cousins", "Up to siblings" };
         private static int _currentGeneration = 0;
@@ -53,39 +59,50 @@ namespace Genetics_Simulation
         public static int MutationVarianceChance { get; set; }
         public static bool CrossRegionBreeding { get; set; }
         public static bool SameGenderBreeding { get; set; }
+        public static bool EnableLogging { get; set; }
+        public static bool LogPersons { get; set; }
+        public static bool LogGenerations { get; set; }
+        public static bool LogEvents { get; set; }
         public static bool EnableJSONExport { get; set; }
-        public static string? JSONExportPath { get; set; }
+        public static bool EnableLogExport { get; set; }
+        public static string? ExportPath { get; set; }
         public static string? Inbreeding { get; set; }
         public static string? SimulationName { get; set; }
 
         //This method initializes the simulation with the given parameters, creates new person objects by generation, and logs when the simulation is completed and gives some stats at the end.
         public static void RunSimulation()
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            double executionTime = 0;
             SimulationName = GUID.GenerateGUID(string.Empty, 8);
             Log($"Simulation{SimulationName} started.");
+            if (LogGenerations) Log($"Initial population generation started.");
             GenerateInitialRound();
-            Log("Initial population generated.");
+            if (LogGenerations) Log("Initial population generated.");
             _remainingPopulation = new List<Person>(Population);
 
             for (; _currentGeneration < TotalGenerations; _currentGeneration++)
             {
                 if (_remainingPopulation.Count(p => p.Generation == _currentGeneration) <= 1) break;
-                Log($"Generation {_currentGeneration + 1} started.");
+                if (LogGenerations) Log($"Generation {_currentGeneration + 1} started.");
                 while (_remainingPopulation.Count > 0)
                 {
                     BreedNewPerson(_currentGeneration);
                 }
 
-                Log($"Generation {_currentGeneration + 1} completed.");
+                if (LogGenerations) Log($"Generation {_currentGeneration + 1} completed.");
                 _remainingPopulation = new List<Person>(Population);
             }
 
+            stopwatch.Stop();
+            executionTime = stopwatch.Elapsed.TotalSeconds;
             Log($"Simulation{SimulationName} completed.");
-            Log("Total population: " + Population.Count + ".");
-            Log("Total generations: " + _currentGeneration + ".");
-            Log("Total mutations: " + Chromosome.TotalMutations + ".");
-            Log("Total recombinations: " + Chromosome.TotalRecombinations + ".");
-            Log("Total emigrations: " + TotalEmigrations + ".");
+            Log($"Total population: {Population.Count}.");
+            Log($"Total generations: {_currentGeneration}.");
+            Log($"Total mutations: {Chromosome.TotalMutations}.");
+            Log($"Total recombinations: {Chromosome.TotalRecombinations}.");
+            Log($"Total emigrations: {TotalEmigrations}.");
+            Log($"Total execution time: {executionTime} seconds.");
         }
 
         //This method generates the initial population of the simulation.
@@ -111,7 +128,7 @@ namespace Genetics_Simulation
 
                 Person person = new Person(GenderRatio, _currentGeneration, region);
                 Population.Add(person);
-                Log($"Person #{person.Number} {person.ID} generated. Generation: {person.Generation}, Gender: {person.Gender}, Region: {person.Region.Key}, Desirability: {person.Desirability}.");
+                if (LogPersons) Log($"Person #{person.Number} {person.ID} generated. Generation: {person.Generation}, Gender: {person.Gender}, Region: {person.Region.Key}, Desirability: {person.Desirability}.");
             }
         }
 
@@ -228,8 +245,8 @@ namespace Genetics_Simulation
 
                 child = new Person(childGenome, parents.Item1.ID, parents.Item2.ID, generation + 1, GenderRatio, region);
                 child.EmigrationEvent = emigrationEvent;
-                if (emigrationEvent) Log($"Emigration event occurred by Person {child.ID} to Region {region.Key}!");
-                Log($"Person #{child.Number} {child.ID} generated. Generation: {child.Generation}, Gender: {child.Gender}, Region: {child.Region.Key}, Desirability: {child.Desirability}.");
+                if (emigrationEvent && LogEvents) Log($"Emigration event occurred by Person {child.ID} to Region {region.Key}!");
+                if (LogPersons) Log($"Person #{child.Number} {child.ID} generated. Generation: {child.Generation}, Gender: {child.Gender}, Region: {child.Region.Key}, Desirability: {child.Desirability}.");
                 children.Add(child);
             }
             
@@ -300,7 +317,7 @@ namespace Genetics_Simulation
         //This method logs messages to the console and subscribes to the OnLogEvent event.
         public static void Log(string message)
         {
-            OnLogEvent?.Invoke($"{DateTime.Now}: {message}");
+            if (EnableLogging) OnLogEvent?.Invoke($"{DateTime.Now}: {message}");
         }
 
         //This method gets the default vavlue for the initial population.
@@ -403,6 +420,36 @@ namespace Genetics_Simulation
         public static bool GetEnableJSONExportDefault()
         {
             return _enableJSONExportDefault;
+        }
+
+        //This method gets the default state for log export permission.
+        public static bool GetEnableLogExportDefault()
+        {
+            return _enableLogExportDefault;
+        }
+
+        //This method gets the default state for logging permission.
+        public static bool GetEnableLoggingDefault()
+        {
+            return _enableLoggingDefault;
+        }
+
+        //This method gets the default state for person logging permission.
+        public static bool GetLogPersonsDefault()
+        {
+            return _logPersonsDefault;
+        }
+
+        //This method gets the default state for generation logging permission.
+        public static bool GetLogGenerationsDefault()
+        {
+            return _logGenerationsDefault;
+        }
+
+        //This method gets the default state for event logging permission.
+        public static bool GetLogEventsDefault()
+        {
+            return _logEventsDefault;
         }
 
         //This method gets the default JSON export path.

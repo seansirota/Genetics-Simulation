@@ -21,7 +21,7 @@ namespace Genetics_Simulation
         // Method for getting the file path for exporting files including the population data and logs.
         public static string GetFilePath(string fileType, string fileExtension)
         {
-            string? folderPath = Simulation.JSONExportPath;
+            string? folderPath = Simulation.ExportPath;
 
             if (folderPath != null)
             {
@@ -66,8 +66,13 @@ namespace Genetics_Simulation
             Simulation.Inbreeding = EnableInbreedingComboBox.Text;
             Simulation.CrossRegionBreeding = EnableCrossRegionBreedingCheckBox.Checked;
             Simulation.SameGenderBreeding = EnableSameGenderBreedingCheckBox.Checked;
-            Simulation.EnableJSONExport = EnableJSONandLogExportCheckBox.Checked;
-            Simulation.JSONExportPath = ExportPathTextBox.Text;
+            Simulation.EnableLogging = EnableLoggingCheckBox.Checked;
+            Simulation.LogPersons = LogPersonsCheckBox.Checked;
+            Simulation.LogGenerations = LogGenerationsCheckBox.Checked;
+            Simulation.LogEvents = LogEventsCheckBox.Checked;
+            Simulation.EnableJSONExport = EnableJSONExportCheckBox.Checked;
+            Simulation.EnableLogExport = EnableLogExportCheckBox.Checked;
+            Simulation.ExportPath = ExportPathTextBox.Text;
 
             LoggingRichTextBox.Clear();
             GUID.ClearUsedGUIDs();
@@ -76,11 +81,8 @@ namespace Genetics_Simulation
             Person.PersonCount = 0;
             await Task.Run(() => Simulation.RunSimulation());
 
-            if (Simulation.EnableJSONExport)
-            {
-                Export.ExportData(Simulation.Population, Simulation.JSONExportPath);
-                Export.ExportLog(_lastLoggedIndex, LoggingRichTextBox);
-            }
+            if (Simulation.EnableJSONExport) Export.ExportData(Simulation.Population, Simulation.ExportPath);
+            if (Simulation.EnableLogExport) Export.ExportLog(_lastLoggedIndex, LoggingRichTextBox);
 
             _tableDataForm.RefreshPersonList();
 
@@ -117,7 +119,13 @@ namespace Genetics_Simulation
             EmigrationRateNumericUpDown.Value = Simulation.GetEmigrationChanceDefault();
             BiasVarianceRateNumericUpDown.Value = Simulation.GetBiasVarianceChanceDefault();
 
-            EnableJSONandLogExportCheckBox.Checked = Simulation.GetEnableJSONExportDefault();
+            EnableLoggingCheckBox.Checked = Simulation.GetEnableLoggingDefault();
+            LogPersonsCheckBox.Checked = Simulation.GetLogPersonsDefault();
+            LogGenerationsCheckBox.Checked = Simulation.GetLogGenerationsDefault();
+            LogEventsCheckBox.Checked = Simulation.GetLogEventsDefault();
+
+            EnableJSONExportCheckBox.Checked = Simulation.GetEnableJSONExportDefault();
+            EnableLogExportCheckBox.Checked = Simulation.GetEnableLogExportDefault();
             ExportPathTextBox.Text = Simulation.GetJSONExportPathDefault();
 
             LoggingRichTextBox.Clear();
@@ -158,7 +166,7 @@ namespace Genetics_Simulation
                 {
                     if (LoggingRichTextBox.TextLength > maxLogSize)
                     {
-                        if (Simulation.EnableJSONExport && Simulation.JSONExportPath != null)
+                        if (Simulation.EnableLogExport && Simulation.ExportPath != null)
                         {
                             string filePath = GetFilePath("log", ".txt");
 
@@ -193,7 +201,12 @@ namespace Genetics_Simulation
         // Event handler for the Import JSON button click event. Opens a file dialog for the user to select a JSON file to import population data from.
         private async void ImportJSONButton_Click(object sender, EventArgs e)
         {
-            using(OpenFileDialog openFileDialog = new OpenFileDialog())
+            RunSimulationButton.Enabled = false;
+            ViewTableButton.Enabled = false;
+            ResetDefaultsButton.Enabled = false;
+            ImportJSONButton.Enabled = false;
+
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Filter = "JSON files (*.json)|*.json";
                 openFileDialog.Title = "Select a Population JSON file to import.";
@@ -212,20 +225,35 @@ namespace Genetics_Simulation
                         Simulation.Log($"Population data imported from {selectedFilePath}.");
                         Simulation.Log("Total population: " + Simulation.Population.Count + ".");
                         Simulation.Log("Total generations: " + Simulation.Population.Select(p => p.Generation).Distinct().Count() + ".");
-                        Simulation.Log("Total mutations: " + Simulation.Population.SelectMany(p => p.Genome).SelectMany(c => c.MChromatid.Concat(c.FChromatid)).Count(g => g.MutationEvent) + ".");
-                        Simulation.Log("Total recombinations: " + Simulation.Population.SelectMany(p => p.Genome).Count(c => c.RecombinationEvent) + ".");
-                        Simulation.Log("Total emigrations: " + Simulation.Population.Count(p => p.EmigrationEvent) + ".");
                     }
                     else Simulation.Log($"No population data found in {selectedFilePath}.");
                 }
             }
+
+            RunSimulationButton.Enabled = true;
+            ViewTableButton.Enabled = true;
+            ResetDefaultsButton.Enabled = true;
+            ImportJSONButton.Enabled = true;
         }
 
         // Event handler for the Enable JSON Export check box checked changed event. Enables the export path text box if the check box is checked.
-        private void EnableJSONExportCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void EnableJSONandLogExportCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            bool isChecked = EnableJSONandLogExportCheckBox.Checked;
-            ExportPathTextBox.Enabled = isChecked;
+            bool isCheckedJSON = EnableJSONExportCheckBox.Checked;
+            bool isCheckedLog = EnableLogExportCheckBox.Checked;
+            if (isCheckedJSON || isCheckedLog) ExportPathTextBox.Enabled = true;
+            else ExportPathTextBox.Enabled = false;
+        }
+
+        private void EnableLoggingCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            bool isChecked = EnableLoggingCheckBox.Checked;
+            LogPersonsCheckBox.Enabled = isChecked;
+            LogPersonsCheckBox.Checked = isChecked;
+            LogGenerationsCheckBox.Enabled = isChecked;
+            LogGenerationsCheckBox.Checked = isChecked;
+            LogEventsCheckBox.Enabled = isChecked;
+            LogEventsCheckBox.Checked = isChecked;
         }
 
         // Event handler for the Minimum Desirability numeric up down value changed event. Ensures the minimum value is less than the maximum value.

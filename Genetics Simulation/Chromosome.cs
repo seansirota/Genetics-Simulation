@@ -91,7 +91,7 @@ namespace Genetics_Simulation
                 MChromatid = newMChromatid;
                 FChromatid = newFChromatid;
                 RecombinationEvent = true;
-                Simulation.Log($"Recombination event occurred on chromosome {ID}!");
+                if (Simulation.LogEvents) Simulation.Log($"Recombination event occurred on chromosome {ID}!");
                 TotalRecombinations++;
             }
         }
@@ -129,10 +129,11 @@ namespace Genetics_Simulation
                     gene.Desirability = desirability;
                     gene.MutationEvent = true;
                     
-                    Simulation.Log($"Mutation event occurred on gene {gene.ID}!");
+                    if (Simulation.LogEvents) Simulation.Log($"Mutation event occurred; new trait {gene.Trait}!");
                     TotalMutations++;
                 }
-                else gene = new Gene(g);
+                else gene = g;
+
                 if (gender == "Male") MChromatid.Add(gene);
                 else if (gender == "Female") FChromatid.Add(gene);
             }

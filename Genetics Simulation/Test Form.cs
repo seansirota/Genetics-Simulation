@@ -22,14 +22,14 @@ namespace Genetics_Simulation
 
                 foreach (Gene g in chromosome.MChromatid)
                 {
-                    string geneInfo = $"Gene ID: {g.ID}, Trait ID: {g.Trait}, Chrom Pos: {g.CPos}, Gene Pos: {g.GPos}, Color: {g.HexColor}, Desirability: {g.Desirability}\n";
+                    string geneInfo = $"Trait ID: {g.Trait}, Chrom Pos: {g.CPos}, Gene Pos: {g.GPos}, Color: {g.HexColor}, Desirability: {g.Desirability}\n";
                     AppendColoredText(geneInfo, g.HexColor);
                 }
 
                 AppendColoredText("Female Chromatid\n", "#000000");
                 foreach (Gene g in chromosome.FChromatid)
                 {
-                    string geneInfo = $"Gene ID: {g.ID}, Trait ID: {g.Trait}, Chrom Pos: {g.CPos}, Gene Pos: {g.GPos}, Color: {g.HexColor}, Desirability: {g.Desirability}\n";
+                    string geneInfo = $"Trait ID: {g.Trait}, Chrom Pos: {g.CPos}, Gene Pos: {g.GPos}, Color: {g.HexColor}, Desirability: {g.Desirability}\n";
                     AppendColoredText(geneInfo, g.HexColor);
                 }
 

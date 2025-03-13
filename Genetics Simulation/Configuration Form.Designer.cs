@@ -57,8 +57,10 @@
             TotalRegionsNumericUpDown = new NumericUpDown();
             TotalRegionsLabel = new Label();
             ExportConfigurationGroupBox = new GroupBox();
-            EnableJSONandLogExportCheckBox = new CheckBox();
-            EnableJSONandLogExportLabel = new Label();
+            EnableLogExportCheckBox = new CheckBox();
+            EnableLogExportLabel = new Label();
+            EnableJSONExportCheckBox = new CheckBox();
+            EnableJSONExportLabel = new Label();
             ExportPathTextBox = new TextBox();
             ExportPathLabel = new Label();
             RunSimulationButton = new Button();
@@ -76,6 +78,15 @@
             MinimumChildrenLabel = new Label();
             MaximumDesirabilityNumericUpDown = new NumericUpDown();
             MaximumDesirabilityLabel = new Label();
+            groupBox1 = new GroupBox();
+            LogGenerationsCheckBox = new CheckBox();
+            LogGenerationsLabel = new Label();
+            LogPersonsCheckBox = new CheckBox();
+            LogPersonsLabel = new Label();
+            LogEventsCheckBox = new CheckBox();
+            LogEventsLabel = new Label();
+            EnableLoggingCheckBox = new CheckBox();
+            EnableLoggingLabel = new Label();
             GeneralConfigurationGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)GenderRatioNumericUpDown).BeginInit();
             ((System.ComponentModel.ISupportInitialize)MutationRateNumericUpDown).BeginInit();
@@ -95,6 +106,7 @@
             ((System.ComponentModel.ISupportInitialize)MaximumChildrenNumericUpDown).BeginInit();
             ((System.ComponentModel.ISupportInitialize)MinimumChildrenNumericUpDown).BeginInit();
             ((System.ComponentModel.ISupportInitialize)MaximumDesirabilityNumericUpDown).BeginInit();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // GeneralConfigurationGroupBox
@@ -136,10 +148,11 @@
             // MutationRateNumericUpDown
             // 
             MutationRateNumericUpDown.Location = new Point(150, 104);
+            MutationRateNumericUpDown.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             MutationRateNumericUpDown.Name = "MutationRateNumericUpDown";
             MutationRateNumericUpDown.Size = new Size(70, 23);
             MutationRateNumericUpDown.TabIndex = 7;
-            MutationRateNumericUpDown.Value = new decimal(new int[] { 100, 0, 0, 0 });
+            MutationRateNumericUpDown.Value = new decimal(new int[] { 10000, 0, 0, 0 });
             // 
             // MutationRateLabel
             // 
@@ -223,7 +236,7 @@
             // EnableSameGenderBreedingCheckBox
             // 
             EnableSameGenderBreedingCheckBox.AutoSize = true;
-            EnableSameGenderBreedingCheckBox.Location = new Point(183, 84);
+            EnableSameGenderBreedingCheckBox.Location = new Point(191, 84);
             EnableSameGenderBreedingCheckBox.Name = "EnableSameGenderBreedingCheckBox";
             EnableSameGenderBreedingCheckBox.Size = new Size(15, 14);
             EnableSameGenderBreedingCheckBox.TabIndex = 7;
@@ -241,7 +254,7 @@
             // EnableCrossRegionBreedingCheckBox
             // 
             EnableCrossRegionBreedingCheckBox.AutoSize = true;
-            EnableCrossRegionBreedingCheckBox.Location = new Point(183, 55);
+            EnableCrossRegionBreedingCheckBox.Location = new Point(191, 55);
             EnableCrossRegionBreedingCheckBox.Name = "EnableCrossRegionBreedingCheckBox";
             EnableCrossRegionBreedingCheckBox.Size = new Size(15, 14);
             EnableCrossRegionBreedingCheckBox.TabIndex = 3;
@@ -363,40 +376,61 @@
             // 
             // ExportConfigurationGroupBox
             // 
-            ExportConfigurationGroupBox.Controls.Add(EnableJSONandLogExportCheckBox);
-            ExportConfigurationGroupBox.Controls.Add(EnableJSONandLogExportLabel);
+            ExportConfigurationGroupBox.Controls.Add(EnableLogExportCheckBox);
+            ExportConfigurationGroupBox.Controls.Add(EnableLogExportLabel);
+            ExportConfigurationGroupBox.Controls.Add(EnableJSONExportCheckBox);
+            ExportConfigurationGroupBox.Controls.Add(EnableJSONExportLabel);
             ExportConfigurationGroupBox.Controls.Add(ExportPathTextBox);
             ExportConfigurationGroupBox.Controls.Add(ExportPathLabel);
-            ExportConfigurationGroupBox.Location = new Point(12, 588);
+            ExportConfigurationGroupBox.Location = new Point(12, 667);
             ExportConfigurationGroupBox.Name = "ExportConfigurationGroupBox";
-            ExportConfigurationGroupBox.Size = new Size(275, 79);
-            ExportConfigurationGroupBox.TabIndex = 4;
+            ExportConfigurationGroupBox.Size = new Size(275, 107);
+            ExportConfigurationGroupBox.TabIndex = 5;
             ExportConfigurationGroupBox.TabStop = false;
             ExportConfigurationGroupBox.Text = "Export Configuration";
             // 
-            // EnableJSONandLogExportCheckBox
+            // EnableLogExportCheckBox
             // 
-            EnableJSONandLogExportCheckBox.AutoSize = true;
-            EnableJSONandLogExportCheckBox.Location = new Point(172, 20);
-            EnableJSONandLogExportCheckBox.Name = "EnableJSONandLogExportCheckBox";
-            EnableJSONandLogExportCheckBox.Size = new Size(15, 14);
-            EnableJSONandLogExportCheckBox.TabIndex = 6;
-            EnableJSONandLogExportCheckBox.UseVisualStyleBackColor = true;
-            EnableJSONandLogExportCheckBox.CheckedChanged += EnableJSONExportCheckBox_CheckedChanged;
+            EnableLogExportCheckBox.AutoSize = true;
+            EnableLogExportCheckBox.Location = new Point(134, 49);
+            EnableLogExportCheckBox.Name = "EnableLogExportCheckBox";
+            EnableLogExportCheckBox.Size = new Size(15, 14);
+            EnableLogExportCheckBox.TabIndex = 8;
+            EnableLogExportCheckBox.UseVisualStyleBackColor = true;
+            EnableLogExportCheckBox.CheckedChanged += EnableJSONandLogExportCheckBox_CheckedChanged;
             // 
-            // EnableJSONandLogExportLabel
+            // EnableLogExportLabel
             // 
-            EnableJSONandLogExportLabel.AutoSize = true;
-            EnableJSONandLogExportLabel.Location = new Point(6, 19);
-            EnableJSONandLogExportLabel.Name = "EnableJSONandLogExportLabel";
-            EnableJSONandLogExportLabel.Size = new Size(160, 15);
-            EnableJSONandLogExportLabel.TabIndex = 5;
-            EnableJSONandLogExportLabel.Text = "Enable JSON and Log Export?";
+            EnableLogExportLabel.AutoSize = true;
+            EnableLogExportLabel.Location = new Point(6, 48);
+            EnableLogExportLabel.Name = "EnableLogExportLabel";
+            EnableLogExportLabel.Size = new Size(106, 15);
+            EnableLogExportLabel.TabIndex = 7;
+            EnableLogExportLabel.Text = "Enable Log Export?";
+            // 
+            // EnableJSONExportCheckBox
+            // 
+            EnableJSONExportCheckBox.AutoSize = true;
+            EnableJSONExportCheckBox.Location = new Point(134, 20);
+            EnableJSONExportCheckBox.Name = "EnableJSONExportCheckBox";
+            EnableJSONExportCheckBox.Size = new Size(15, 14);
+            EnableJSONExportCheckBox.TabIndex = 6;
+            EnableJSONExportCheckBox.UseVisualStyleBackColor = true;
+            EnableJSONExportCheckBox.CheckedChanged += EnableJSONandLogExportCheckBox_CheckedChanged;
+            // 
+            // EnableJSONExportLabel
+            // 
+            EnableJSONExportLabel.AutoSize = true;
+            EnableJSONExportLabel.Location = new Point(6, 19);
+            EnableJSONExportLabel.Name = "EnableJSONExportLabel";
+            EnableJSONExportLabel.Size = new Size(114, 15);
+            EnableJSONExportLabel.TabIndex = 5;
+            EnableJSONExportLabel.Text = "Enable JSON Export?";
             // 
             // ExportPathTextBox
             // 
             ExportPathTextBox.Enabled = false;
-            ExportPathTextBox.Location = new Point(82, 45);
+            ExportPathTextBox.Location = new Point(82, 74);
             ExportPathTextBox.Name = "ExportPathTextBox";
             ExportPathTextBox.Size = new Size(187, 23);
             ExportPathTextBox.TabIndex = 4;
@@ -405,7 +439,7 @@
             // ExportPathLabel
             // 
             ExportPathLabel.AutoSize = true;
-            ExportPathLabel.Location = new Point(6, 48);
+            ExportPathLabel.Location = new Point(6, 77);
             ExportPathLabel.Name = "ExportPathLabel";
             ExportPathLabel.Size = new Size(70, 15);
             ExportPathLabel.TabIndex = 0;
@@ -413,40 +447,40 @@
             // 
             // RunSimulationButton
             // 
-            RunSimulationButton.Location = new Point(12, 673);
+            RunSimulationButton.Location = new Point(12, 780);
             RunSimulationButton.Name = "RunSimulationButton";
             RunSimulationButton.Size = new Size(134, 47);
-            RunSimulationButton.TabIndex = 5;
+            RunSimulationButton.TabIndex = 6;
             RunSimulationButton.Text = "Run Simulation";
             RunSimulationButton.UseVisualStyleBackColor = true;
             RunSimulationButton.Click += RunSimulationButton_Click;
             // 
             // ImportJSONButton
             // 
-            ImportJSONButton.Location = new Point(153, 726);
+            ImportJSONButton.Location = new Point(153, 833);
             ImportJSONButton.Name = "ImportJSONButton";
             ImportJSONButton.Size = new Size(134, 47);
-            ImportJSONButton.TabIndex = 8;
+            ImportJSONButton.TabIndex = 9;
             ImportJSONButton.Text = "Import JSON";
             ImportJSONButton.UseVisualStyleBackColor = true;
             ImportJSONButton.Click += ImportJSONButton_Click;
             // 
             // ViewTableButton
             // 
-            ViewTableButton.Location = new Point(152, 673);
+            ViewTableButton.Location = new Point(152, 780);
             ViewTableButton.Name = "ViewTableButton";
             ViewTableButton.Size = new Size(134, 47);
-            ViewTableButton.TabIndex = 6;
+            ViewTableButton.TabIndex = 7;
             ViewTableButton.Text = "View Table";
             ViewTableButton.UseVisualStyleBackColor = true;
             ViewTableButton.Click += ViewTableButton_Click;
             // 
             // ResetDefaultsButton
             // 
-            ResetDefaultsButton.Location = new Point(12, 726);
+            ResetDefaultsButton.Location = new Point(12, 833);
             ResetDefaultsButton.Name = "ResetDefaultsButton";
             ResetDefaultsButton.Size = new Size(134, 47);
-            ResetDefaultsButton.TabIndex = 7;
+            ResetDefaultsButton.TabIndex = 8;
             ResetDefaultsButton.Text = "Reset Defaults";
             ResetDefaultsButton.UseVisualStyleBackColor = true;
             ResetDefaultsButton.Click += ResetDefaultsButton_Click;
@@ -456,7 +490,7 @@
             LoggingRichTextBox.Location = new Point(6, 22);
             LoggingRichTextBox.Name = "LoggingRichTextBox";
             LoggingRichTextBox.ReadOnly = true;
-            LoggingRichTextBox.Size = new Size(728, 733);
+            LoggingRichTextBox.Size = new Size(743, 840);
             LoggingRichTextBox.TabIndex = 9;
             LoggingRichTextBox.Text = "";
             // 
@@ -465,8 +499,8 @@
             Logging.Controls.Add(LoggingRichTextBox);
             Logging.Location = new Point(293, 12);
             Logging.Name = "Logging";
-            Logging.Size = new Size(740, 761);
-            Logging.TabIndex = 9;
+            Logging.Size = new Size(755, 868);
+            Logging.TabIndex = 10;
             Logging.TabStop = false;
             Logging.Text = "Logging";
             // 
@@ -565,11 +599,102 @@
             MaximumDesirabilityLabel.TabIndex = 16;
             MaximumDesirabilityLabel.Text = "Maximum Desirability (%):";
             // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(LogGenerationsCheckBox);
+            groupBox1.Controls.Add(LogGenerationsLabel);
+            groupBox1.Controls.Add(LogPersonsCheckBox);
+            groupBox1.Controls.Add(LogPersonsLabel);
+            groupBox1.Controls.Add(LogEventsCheckBox);
+            groupBox1.Controls.Add(LogEventsLabel);
+            groupBox1.Controls.Add(EnableLoggingCheckBox);
+            groupBox1.Controls.Add(EnableLoggingLabel);
+            groupBox1.Location = new Point(12, 588);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(274, 73);
+            groupBox1.TabIndex = 4;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Log Configuration";
+            // 
+            // LogGenerationsCheckBox
+            // 
+            LogGenerationsCheckBox.AutoSize = true;
+            LogGenerationsCheckBox.Location = new Point(118, 49);
+            LogGenerationsCheckBox.Name = "LogGenerationsCheckBox";
+            LogGenerationsCheckBox.Size = new Size(15, 14);
+            LogGenerationsCheckBox.TabIndex = 15;
+            LogGenerationsCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // LogGenerationsLabel
+            // 
+            LogGenerationsLabel.AutoSize = true;
+            LogGenerationsLabel.Location = new Point(6, 48);
+            LogGenerationsLabel.Name = "LogGenerationsLabel";
+            LogGenerationsLabel.Size = new Size(98, 15);
+            LogGenerationsLabel.TabIndex = 14;
+            LogGenerationsLabel.Text = "Log Generations?";
+            // 
+            // LogPersonsCheckBox
+            // 
+            LogPersonsCheckBox.AutoSize = true;
+            LogPersonsCheckBox.Location = new Point(245, 20);
+            LogPersonsCheckBox.Name = "LogPersonsCheckBox";
+            LogPersonsCheckBox.Size = new Size(15, 14);
+            LogPersonsCheckBox.TabIndex = 13;
+            LogPersonsCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // LogPersonsLabel
+            // 
+            LogPersonsLabel.AutoSize = true;
+            LogPersonsLabel.Location = new Point(155, 19);
+            LogPersonsLabel.Name = "LogPersonsLabel";
+            LogPersonsLabel.Size = new Size(76, 15);
+            LogPersonsLabel.TabIndex = 12;
+            LogPersonsLabel.Text = "Log Persons?";
+            // 
+            // LogEventsCheckBox
+            // 
+            LogEventsCheckBox.AutoSize = true;
+            LogEventsCheckBox.Location = new Point(245, 49);
+            LogEventsCheckBox.Name = "LogEventsCheckBox";
+            LogEventsCheckBox.Size = new Size(15, 14);
+            LogEventsCheckBox.TabIndex = 11;
+            LogEventsCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // LogEventsLabel
+            // 
+            LogEventsLabel.AutoSize = true;
+            LogEventsLabel.Location = new Point(155, 48);
+            LogEventsLabel.Name = "LogEventsLabel";
+            LogEventsLabel.Size = new Size(69, 15);
+            LogEventsLabel.TabIndex = 10;
+            LogEventsLabel.Text = "Log Events?";
+            // 
+            // EnableLoggingCheckBox
+            // 
+            EnableLoggingCheckBox.AutoSize = true;
+            EnableLoggingCheckBox.Location = new Point(118, 20);
+            EnableLoggingCheckBox.Name = "EnableLoggingCheckBox";
+            EnableLoggingCheckBox.Size = new Size(15, 14);
+            EnableLoggingCheckBox.TabIndex = 9;
+            EnableLoggingCheckBox.UseVisualStyleBackColor = true;
+            EnableLoggingCheckBox.CheckedChanged += EnableLoggingCheckBox_CheckedChanged;
+            // 
+            // EnableLoggingLabel
+            // 
+            EnableLoggingLabel.AutoSize = true;
+            EnableLoggingLabel.Location = new Point(6, 19);
+            EnableLoggingLabel.Name = "EnableLoggingLabel";
+            EnableLoggingLabel.Size = new Size(94, 15);
+            EnableLoggingLabel.TabIndex = 9;
+            EnableLoggingLabel.Text = "Enable Logging?";
+            // 
             // ConfigurationForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1045, 784);
+            ClientSize = new Size(1060, 892);
+            Controls.Add(groupBox1);
             Controls.Add(ThresholdConfigurationGroupBox);
             Controls.Add(Logging);
             Controls.Add(ResetDefaultsButton);
@@ -609,6 +734,8 @@
             ((System.ComponentModel.ISupportInitialize)MaximumChildrenNumericUpDown).EndInit();
             ((System.ComponentModel.ISupportInitialize)MinimumChildrenNumericUpDown).EndInit();
             ((System.ComponentModel.ISupportInitialize)MaximumDesirabilityNumericUpDown).EndInit();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -640,8 +767,8 @@
         private GroupBox ExportConfigurationGroupBox;
         private TextBox ExportPathTextBox;
         private Label ExportPathLabel;
-        private Label EnableJSONandLogExportLabel;
-        private CheckBox EnableJSONandLogExportCheckBox;
+        private Label EnableJSONExportLabel;
+        private CheckBox EnableJSONExportCheckBox;
         private Button RunSimulationButton;
         private Button ImportJSONButton;
         private Button ViewTableButton;
@@ -661,5 +788,16 @@
         private Label MaximumDesirabilityLabel;
         private NumericUpDown MutationVarianceRateNumericUpDown;
         private Label MutationVarianceRate;
+        private GroupBox groupBox1;
+        private CheckBox EnableLogExportCheckBox;
+        private Label EnableLogExportLabel;
+        private Label EnableLoggingLabel;
+        private Label LogGenerationsLabel;
+        private CheckBox LogPersonsCheckBox;
+        private Label LogPersonsLabel;
+        private CheckBox LogEventsCheckBox;
+        private Label LogEventsLabel;
+        private CheckBox EnableLoggingCheckBox;
+        private CheckBox LogGenerationsCheckBox;
     }
 }

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using Newtonsoft.Json;
-using Microsoft.VisualBasic.Logging;
+﻿using Newtonsoft.Json;
 
 namespace Genetics_Simulation
 {
@@ -24,22 +17,21 @@ namespace Genetics_Simulation
 
                 if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
 
-                try
+                exportName = "simulation" + Simulation.SimulationName + "\\" + "data" + Simulation.SimulationName + ".json";
+                filePath = Path.Combine(folderPath, exportName);
+
+                using (StreamWriter file = File.CreateText(filePath))
+                using (JsonTextWriter writer = new JsonTextWriter(file))
                 {
-                    string json = JsonConvert.SerializeObject(population, Formatting.Indented);
-                    exportName = "simulation" + Simulation.SimulationName + "\\" + "data" + Simulation.SimulationName + ".json";
-                    filePath = Path.Combine(folderPath, exportName);
-                    File.WriteAllText(filePath, json);
-                    Simulation.Log($"Data exported to {filePath}.");
+                    JsonSerializer serializer = new JsonSerializer { Formatting = Formatting.Indented };
+                    serializer.Serialize(writer, population);
                 }
-                catch (Exception ex)
-                {
-                    Simulation.Log($"Error exporting population to JSON: {ex.Message}");
-                }
+
+                Simulation.Log($"Data exported to {filePath}.");
             }
             catch (Exception ex)
             {
-                Simulation.Log($"Error creating export directory: {ex.Message}");
+                Simulation.Log($"Error exporting population to JSON: {ex.Message}");
             }
         }
 
@@ -48,7 +40,7 @@ namespace Genetics_Simulation
         {
             try
             {
-                if (!string.IsNullOrEmpty(Simulation.JSONExportPath))
+                if (!string.IsNullOrEmpty(Simulation.ExportPath))
                 {
                     string filePath = ConfigurationForm.GetFilePath("log", ".txt");
 
