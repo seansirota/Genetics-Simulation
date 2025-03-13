@@ -622,7 +622,7 @@
             LogGenerationsCheckBox.Location = new Point(118, 49);
             LogGenerationsCheckBox.Name = "LogGenerationsCheckBox";
             LogGenerationsCheckBox.Size = new Size(15, 14);
-            LogGenerationsCheckBox.TabIndex = 15;
+            LogGenerationsCheckBox.TabIndex = 11;
             LogGenerationsCheckBox.UseVisualStyleBackColor = true;
             // 
             // LogGenerationsLabel
@@ -640,7 +640,7 @@
             LogPersonsCheckBox.Location = new Point(245, 20);
             LogPersonsCheckBox.Name = "LogPersonsCheckBox";
             LogPersonsCheckBox.Size = new Size(15, 14);
-            LogPersonsCheckBox.TabIndex = 13;
+            LogPersonsCheckBox.TabIndex = 10;
             LogPersonsCheckBox.UseVisualStyleBackColor = true;
             // 
             // LogPersonsLabel
@@ -658,7 +658,7 @@
             LogEventsCheckBox.Location = new Point(245, 49);
             LogEventsCheckBox.Name = "LogEventsCheckBox";
             LogEventsCheckBox.Size = new Size(15, 14);
-            LogEventsCheckBox.TabIndex = 11;
+            LogEventsCheckBox.TabIndex = 12;
             LogEventsCheckBox.UseVisualStyleBackColor = true;
             // 
             // LogEventsLabel
